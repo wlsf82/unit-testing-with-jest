@@ -1,0 +1,17 @@
+{
+  "name": "unit-testing-with-jest",
+  "version": "1.0.0",
+  "description": "The Bookshelf, the lending logic of a small library, built for the Unit Testing with Jest course at the Talking About Testing School.",
+  "type": "commonjs",
+  "keywords": [
+    "jest",
+    "unit-testing",
+    "testing",
+    "talking-about-testing"
+  ],
+  "author": "Walmyr Lima e Silva Filho",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  }
+}
