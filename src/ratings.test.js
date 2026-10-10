@@ -12,4 +12,10 @@ describe('averageRating', () => {
   test('returns null when there are no ratings', () => {
     expect(averageRating([])).toBeNull()
   })
+
+  test('rejects a rating between 1 and 5 that is not an integer', () => {
+    expect(() => averageRating([4, 4.5])).toThrow(
+      new RangeError('ratings must be integers from 1 to 5'),
+    )
+  })
 })

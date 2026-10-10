@@ -69,6 +69,12 @@ describe('sortByDueDate', () => {
     expect(dueDate(loans[0].loanDate, loans[0].plan)).toBe('2026-03-24')
   })
 
+  test('breaks a tie between loans due on the same day by ISBN', () => {
+    const sameDay = { isbn: '9780132350884', memberId: 'm-004', loanDate: '2026-03-01', plan: 'standard' }
+
+    expect(sortByDueDate([sooner, sameDay])).toEqual([sameDay, sooner])
+  })
+
   test('does not change the list it was given', () => {
     const original = [...loans]
 

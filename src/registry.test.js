@@ -43,4 +43,16 @@ describe('createLoanRegistry', () => {
       'member has reached the loan limit',
     )
   })
+
+  test('applies a loan limit other than the default', () => {
+    const generousRegistry = createLoanRegistry({ maxLoansPerMember: 5 })
+    const isbns = ['9780134685991', '9780201633610', '9780132350884', '9780201616224', '9780596517748']
+
+    isbns.forEach((isbn) => generousRegistry.borrow({ ...ana, isbn }))
+
+    expect(generousRegistry.count()).toBe(5)
+    expect(() => generousRegistry.borrow({ ...ana, isbn: '9781491950357' })).toThrow(
+      'member has reached the loan limit',
+    )
+  })
 })
