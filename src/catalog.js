@@ -15,7 +15,7 @@ function createCatalog(httpClient) {
     const normalizedIsbn = validateIsbn(isbn)
 
     try {
-      return httpClient.get(`/books/${normalizedIsbn}`).then(toBook)
+      return await httpClient.get(`/books/${normalizedIsbn}`).then(toBook)
     } catch {
       throw new Error('catalog unavailable')
     }
