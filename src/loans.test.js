@@ -68,4 +68,12 @@ describe('sortByDueDate', () => {
   test('the first loan in the list is due on March 24', () => {
     expect(dueDate(loans[0].loanDate, loans[0].plan)).toBe('2026-03-24')
   })
+
+  test('does not change the list it was given', () => {
+    const original = [...loans]
+
+    sortByDueDate(loans)
+
+    expect(loans).toEqual(original)
+  })
 })

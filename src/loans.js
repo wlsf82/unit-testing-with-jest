@@ -60,7 +60,7 @@ function byDueDateThenIsbn(a, b) {
 }
 
 function sortByDueDate(loans) {
-  return loans.sort(byDueDateThenIsbn)
+  return [...loans].sort(byDueDateThenIsbn)
 }
 
 function formatReceipt(loan) {
