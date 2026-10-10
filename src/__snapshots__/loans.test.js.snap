@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`formatReceipt formats a standard loan receipt 1`] = `
+"Bookshelf loan receipt
+Code: LN-7KQ2XM
+Book: 9780134685991
+Member: m-001
+Borrowed: 2026-03-01
+Due: 2026-03-15 (standard)"
+`;

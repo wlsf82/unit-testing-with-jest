@@ -1,4 +1,4 @@
-const { dueDate, isOverdue, daysLate, sortByDueDate } = require('./loans')
+const { dueDate, isOverdue, daysLate, sortByDueDate, formatReceipt } = require('./loans')
 const { createLoanRegistry } = require('./registry')
 
 describe('dueDate', () => {
@@ -114,5 +114,44 @@ describe('isOverdue and daysLate', () => {
     jest.setSystemTime(new Date('2026-03-10T12:00:00Z'))
 
     expect(daysLate(loan)).toBe(0)
+  })
+})
+
+describe('formatReceipt', () => {
+  const loan = {
+    code: 'LN-7KQ2XM',
+    isbn: '9780134685991',
+    memberId: 'm-001',
+    memberEmail: 'ana@example.com',
+    loanDate: '2026-03-01',
+    plan: 'standard',
+  }
+
+  const premiumLoan = {
+    code: 'LN-AB3CD4',
+    isbn: '9780201633610',
+    memberId: 'm-002',
+    memberEmail: 'bruno@example.com',
+    loanDate: '2026-03-01',
+    plan: 'premium',
+  }
+
+  test('formats a standard loan receipt', () => {
+    expect(formatReceipt(loan)).toMatchSnapshot()
+  })
+
+  test('formats a premium loan receipt', () => {
+    expect(formatReceipt(premiumLoan)).toMatchInlineSnapshot(`
+"Bookshelf loan receipt
+Code: LN-AB3CD4
+Book: 9780201633610
+Member: m-002
+Borrowed: 2026-03-01
+Due: 2026-03-29 (premium)"
+`)
+  })
+
+  test('shows the due date with the plan in brackets', () => {
+    expect(formatReceipt(loan)).toContain('Due: 2026-03-15 (standard)')
   })
 })
