@@ -1,7 +1,7 @@
 jest.mock('./mailer')
 
 const mailer = require('./mailer')
-const { sendReminder } = require('./reminders')
+const { sendReminder, createReminderScheduler } = require('./reminders')
 
 const loan = {
   code: 'LN-7KQ2XM',
@@ -29,5 +29,50 @@ describe('sendReminder', () => {
 
     expect(() => sendReminder(loanWithoutEmail)).toThrow('loan has no member email')
     expect(mailer.send).not.toHaveBeenCalled()
+  })
+})
+
+describe('createReminderScheduler', () => {
+  const loanDate = new Date('2026-03-01T00:00:00Z')
+  const reminderTime = new Date('2026-03-14T09:00:00Z')
+  let scheduler
+
+  beforeEach(() => {
+    jest.useFakeTimers()
+    jest.setSystemTime(loanDate)
+    scheduler = createReminderScheduler()
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  test('sends nothing one millisecond before 09:00 UTC on the day before the due date', () => {
+    scheduler.schedule(loan)
+
+    jest.advanceTimersByTime(reminderTime - loanDate - 1)
+
+    expect(mailer.send).not.toHaveBeenCalled()
+    expect(scheduler.pending()).toBe(1)
+  })
+
+  test('sends one reminder to the member at 09:00 UTC on the day before the due date', () => {
+    scheduler.schedule(loan)
+
+    jest.advanceTimersByTime(reminderTime - loanDate)
+
+    expect(mailer.send).toHaveBeenCalledTimes(1)
+    expect(mailer.send).toHaveBeenCalledWith(expect.objectContaining({ to: 'ana@example.com' }))
+    expect(scheduler.pending()).toBe(0)
+  })
+
+  test('never sends a cancelled reminder', () => {
+    scheduler.schedule(loan)
+
+    scheduler.cancel(loan.code)
+    jest.advanceTimersByTime(reminderTime - loanDate)
+
+    expect(mailer.send).not.toHaveBeenCalled()
+    expect(scheduler.pending()).toBe(0)
   })
 })
