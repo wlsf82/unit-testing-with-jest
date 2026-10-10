@@ -7,7 +7,7 @@ function lateFee(daysLate) {
     throw new RangeError('daysLate must be a non-negative integer')
   }
 
-  if (daysLate < GRACE_PERIOD_DAYS) return 0
+  if (daysLate <= GRACE_PERIOD_DAYS) return 0
 
   return Math.min(daysLate * CENTS_PER_DAY, MAX_FEE_CENTS)
 }
