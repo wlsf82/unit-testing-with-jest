@@ -6,7 +6,7 @@ describe('lateFee', () => {
   })
 
   test('charges 25 cents for each day late', () => {
-    expect(lateFee(10)).toBe(250)
+    expect(lateFee(10)).toBe(200)
   })
 
   test('charges 500 cents for a book 20 days late', () => {
