@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "The Bookshelf, the lending logic of a small library, built for the Unit Testing with Jest course at the Talking About Testing School.",
   "type": "commonjs",
+  "scripts": {
+    "test": "jest"
+  },
   "keywords": [
     "jest",
     "unit-testing",
@@ -13,5 +16,8 @@
   "license": "MIT",
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "jest": "30.5.2"
   }
 }
