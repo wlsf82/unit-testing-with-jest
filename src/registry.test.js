@@ -20,7 +20,7 @@ describe('createLoanRegistry', () => {
     expect(loan.isbn).toBe('9780134685991')
   })
 
-  test.skip('borrowing a book that is already on loan throws', () => {
+  test('borrowing a book that is already on loan throws', () => {
     registry.borrow({ ...ana, isbn: '9780134685991' })
 
     expect(() => registry.borrow({ ...ana, isbn: '9780134685991' })).toThrow(
