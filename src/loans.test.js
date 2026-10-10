@@ -1,4 +1,4 @@
-const { dueDate, sortByDueDate } = require('./loans')
+const { dueDate, isOverdue, daysLate, sortByDueDate } = require('./loans')
 const { createLoanRegistry } = require('./registry')
 
 describe('dueDate', () => {
@@ -75,5 +75,44 @@ describe('sortByDueDate', () => {
     sortByDueDate(loans)
 
     expect(loans).toEqual(original)
+  })
+})
+
+describe('isOverdue and daysLate', () => {
+  const loan = {
+    code: 'LN-7KQ2XM',
+    isbn: '9780134685991',
+    memberId: 'm-001',
+    memberEmail: 'ana@example.com',
+    loanDate: '2026-03-01',
+    plan: 'standard',
+  }
+
+  beforeEach(() => {
+    jest.useFakeTimers()
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  test('is not overdue at the last millisecond of the due date', () => {
+    jest.setSystemTime(new Date('2026-03-15T23:59:59.999Z'))
+
+    expect(isOverdue(loan)).toBe(false)
+    expect(daysLate(loan)).toBe(0)
+  })
+
+  test('is overdue by one day at the first moment of the next day', () => {
+    jest.setSystemTime(new Date('2026-03-16T00:00:00Z'))
+
+    expect(isOverdue(loan)).toBe(true)
+    expect(daysLate(loan)).toBe(1)
+  })
+
+  test('is never negative days late before the due date', () => {
+    jest.setSystemTime(new Date('2026-03-10T12:00:00Z'))
+
+    expect(daysLate(loan)).toBe(0)
   })
 })
